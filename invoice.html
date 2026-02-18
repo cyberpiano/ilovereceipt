@@ -61,8 +61,56 @@
         }
       }
 
+      /* Mobile Input Adjustments */
+      @media (max-width: 640px) {
+        .grid-cols-2 {
+          grid-template-columns: 1fr;
+        }
+        
+        #itemsList div {
+          flex-wrap: wrap;
+        }
+        
+        #itemsList input[type="number"] {
+          flex: 1;
+        }
+      }
+
       .avoid-pagebreak {
         page-break-inside: avoid;
+      }
+
+      .color-slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 12px;
+        border-radius: 6px;
+        background: linear-gradient(to right,
+            #ff0000 0%, #ffff00 17%, #00ff00 33%,
+            #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+        outline: none;
+        cursor: pointer;
+      }
+
+      .color-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: white;
+        border: 2px solid #64748b;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .color-slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: white;
+        border: 2px solid #64748b;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
       }
     </style>
     <!-- Firebase Auth Protection -->
@@ -124,7 +172,7 @@
         </h1>
         <button
           onclick="downloadInvoice()"
-          class="w-full md:w-auto bg-blue-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
+          class="hidden md:flex w-full md:w-auto bg-blue-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-blue-700 transition items-center justify-center gap-2"
         >
           <i class="fa-solid fa-cloud-arrow-down"></i> Download PDF
         </button>
@@ -161,98 +209,118 @@
                   />
                 </label>
               </div>
-              <input
-                type="text"
-                id="bizName"
-                placeholder="Business Name"
-                class="w-full p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
-                oninput="updatePreview()"
-              />
-              <div class="grid grid-cols-2 gap-3">
+              <div class="space-y-1">
+                <label for="bizName" class="text-xs font-bold text-slate-400 uppercase">Business Name</label>
                 <input
-                  type="email"
-                  id="bizEmail"
-                  placeholder="Email"
-                  class="p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
-                  oninput="updatePreview()"
-                />
-                <input
-                  type="tel"
-                  id="bizPhone"
-                  placeholder="Phone"
-                  class="p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
+                  type="text"
+                  id="bizName"
+                  placeholder="Business Name"
+                  class="w-full p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
                   oninput="updatePreview()"
                 />
               </div>
-              <input
-                type="text"
-                id="bizAddr"
-                placeholder="Address / Location"
-                class="w-full p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
-                oninput="updatePreview()"
-              />
 
               <div class="grid grid-cols-2 gap-3">
-                <select
-                  id="countrySelect"
-                  class="p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
-                  onchange="
-                    updateCurrency();
-                    updatePreview();
-                  "
-                >
-                  <option value="USD" data-symbol="$">USA (USD)</option>
-                  <option value="CAD" data-symbol="$">Canada (CAD)</option>
-                  <option value="GBP" data-symbol="£">UK (GBP)</option>
-                  <option value="EUR" data-symbol="€">Europe (EUR)</option>
-                  <option value="CHF" data-symbol="₣">Switzerland (CHF)</option>
-                  <option value="AUD" data-symbol="A$">Australia (AUD)</option>
-                  <option value="JPY" data-symbol="¥">Japan (JPY)</option>
-                  <option value="CNY" data-symbol="¥">China (CNY)</option>
-                  <option value="INR" data-symbol="₹">India (INR)</option>
-                  <option value="SGD" data-symbol="S$">Singapore (SGD)</option>
-                  <option value="HKD" data-symbol="HK$">Hong Kong (HKD)</option>
-                  <option value="MXN" data-symbol="$">Mexico (MXN)</option>
-                  <option value="BRL" data-symbol="R$">Brazil (BRL)</option>
-                  <option value="PKR" data-symbol="₨">Pakistan (PKR)</option>
-                  <option value="AED" data-symbol="د.إ">UAE (AED)</option>
-                  <option value="THB" data-symbol="฿">Thailand (THB)</option>
-                  <optgroup label="African Countries">
-                    <option value="EGP" data-symbol="E£">Egypt (EGP)</option>
-                    <option value="GHS" data-symbol="GH₵">Ghana (GHS)</option>
-                    <option value="NGN" data-symbol="₦">Nigeria (NGN)</option>
-                    <option value="ZAR" data-symbol="R">
-                      South Africa (ZAR)
-                    </option>
-                    <option value="KES" data-symbol="Sh">Kenya (KES)</option>
-                    <option value="TZS" data-symbol="Sh">Tanzania (TZS)</option>
-                    <option value="UGX" data-symbol="Sh">Uganda (UGX)</option>
-                    <option value="MAD" data-symbol="د.م.">
-                      Morocco (MAD)
-                    </option>
-                    <option value="TND" data-symbol="د.ت">Tunisia (TND)</option>
-                    <option value="DZD" data-symbol="د.ج">Algeria (DZD)</option>
-                    <option value="ETB" data-symbol="Br">Ethiopia (ETB)</option>
-                    <option value="BWP" data-symbol="P">Botswana (BWP)</option>
-                    <option value="ZMW" data-symbol="K">Zambia (ZMW)</option>
-                    <option value="ZWL" data-symbol="Z$">Zimbabwe (ZWL)</option>
-                    <option value="RWF" data-symbol="Fr">Rwanda (RWF)</option>
-                    <option value="SOS" data-symbol="Sh">Somalia (SOS)</option>
-                    <option value="SZL" data-symbol="E">Eswatini (SZL)</option>
-                    <option value="LSL" data-symbol="L">Lesotho (LSL)</option>
-                    <option value="MZN" data-symbol="MT">
-                      Mozambique (MZN)
-                    </option>
-                    <option value="AOA" data-symbol="Kz">Angola (AOA)</option>
-                  </optgroup>
-                </select>
+                <div class="space-y-1">
+                  <label for="bizEmail" class="text-xs font-bold text-slate-400 uppercase">Email</label>
+                  <input
+                    type="email"
+                    id="bizEmail"
+                    placeholder="Email"
+                    class="w-full p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
+                    oninput="updatePreview()"
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label for="bizPhone" class="text-xs font-bold text-slate-400 uppercase">Phone</label>
+                  <input
+                    type="tel"
+                    id="bizPhone"
+                    placeholder="Phone"
+                    class="w-full p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
+                    oninput="updatePreview()"
+                  />
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <label for="bizAddr" class="text-xs font-bold text-slate-400 uppercase">Address / Location</label>
                 <input
                   type="text"
-                  id="invNum"
-                  placeholder="Invoice #001"
-                  class="p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
+                  id="bizAddr"
+                  placeholder="Address / Location"
+                  class="w-full p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
                   oninput="updatePreview()"
                 />
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-1">
+                  <label for="countrySelect" class="text-xs font-bold text-slate-400 uppercase">Country / Currency</label>
+                  <select
+                    id="countrySelect"
+                    class="w-full p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
+                    onchange="
+                      updateCurrency();
+                      updatePreview();
+                    "
+                  >
+                    <option value="USD" data-symbol="$">USA (USD)</option>
+                    <option value="CAD" data-symbol="$">Canada (CAD)</option>
+                    <option value="GBP" data-symbol="£">UK (GBP)</option>
+                    <option value="EUR" data-symbol="€">Europe (EUR)</option>
+                    <option value="CHF" data-symbol="₣">Switzerland (CHF)</option>
+                    <option value="AUD" data-symbol="A$">Australia (AUD)</option>
+                    <option value="JPY" data-symbol="¥">Japan (JPY)</option>
+                    <option value="CNY" data-symbol="¥">China (CNY)</option>
+                    <option value="INR" data-symbol="₹">India (INR)</option>
+                    <option value="SGD" data-symbol="S$">Singapore (SGD)</option>
+                    <option value="HKD" data-symbol="HK$">Hong Kong (HKD)</option>
+                    <option value="MXN" data-symbol="$">Mexico (MXN)</option>
+                    <option value="BRL" data-symbol="R$">Brazil (BRL)</option>
+                    <option value="PKR" data-symbol="₨">Pakistan (PKR)</option>
+                    <option value="AED" data-symbol="د.إ">UAE (AED)</option>
+                    <option value="THB" data-symbol="฿">Thailand (THB)</option>
+                    <optgroup label="African Countries">
+                      <option value="EGP" data-symbol="E£">Egypt (EGP)</option>
+                      <option value="GHS" data-symbol="GH₵">Ghana (GHS)</option>
+                      <option value="NGN" data-symbol="₦">Nigeria (NGN)</option>
+                      <option value="ZAR" data-symbol="R">
+                        South Africa (ZAR)
+                      </option>
+                      <option value="KES" data-symbol="Sh">Kenya (KES)</option>
+                      <option value="TZS" data-symbol="Sh">Tanzania (TZS)</option>
+                      <option value="UGX" data-symbol="Sh">Uganda (UGX)</option>
+                      <option value="MAD" data-symbol="د.م.">
+                        Morocco (MAD)
+                      </option>
+                      <option value="TND" data-symbol="د.ت">Tunisia (TND)</option>
+                      <option value="DZD" data-symbol="د.ج">Algeria (DZD)</option>
+                      <option value="ETB" data-symbol="Br">Ethiopia (ETB)</option>
+                      <option value="BWP" data-symbol="P">Botswana (BWP)</option>
+                      <option value="ZMW" data-symbol="K">Zambia (ZMW)</option>
+                      <option value="ZWL" data-symbol="Z$">Zimbabwe (ZWL)</option>
+                      <option value="RWF" data-symbol="Fr">Rwanda (RWF)</option>
+                      <option value="SOS" data-symbol="Sh">Somalia (SOS)</option>
+                      <option value="SZL" data-symbol="E">Eswatini (SZL)</option>
+                      <option value="LSL" data-symbol="L">Lesotho (LSL)</option>
+                      <option value="MZN" data-symbol="MT">
+                        Mozambique (MZN)
+                      </option>
+                      <option value="AOA" data-symbol="Kz">Angola (AOA)</option>
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="space-y-1">
+                  <label for="invNum" class="text-xs font-bold text-slate-400 uppercase">Invoice No.</label>
+                  <input
+                    type="text"
+                    id="invNum"
+                    placeholder="Invoice #001"
+                    class="w-full p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
+                    oninput="updatePreview()"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -264,13 +332,16 @@
               <i class="fa-solid fa-calendar text-purple-500"></i> Invoice Date
             </h2>
             <div class="space-y-4">
-              <input
-                type="date"
-                id="invoiceDate"
-                class="w-full p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
-                oninput="updatePreview()"
-              />
-              <p class="text-xs text-slate-500">Select the invoice date</p>
+              <div class="space-y-1">
+                <label for="invoiceDate" class="text-xs font-bold text-slate-400 uppercase">Select Date</label>
+                <input
+                  type="date"
+                  id="invoiceDate"
+                  class="w-full p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400"
+                  oninput="updatePreview()"
+                />
+              </div>
+              <p class="text-xs text-slate-500">Official invoice issue date</p>
             </div>
           </div>
 
@@ -281,42 +352,57 @@
               <i class="fa-solid fa-user text-green-500"></i> Recipient
             </h2>
             <div class="grid grid-cols-1 gap-4">
-              <input
-                type="text"
-                id="clientBizName"
-                placeholder="Business Name"
-                class="w-full p-3 bg-slate-50 border-none rounded-xl"
-                oninput="updatePreview()"
-              />
-              <input
-                type="text"
-                id="clientName"
-                placeholder="Contact Person Name"
-                class="w-full p-3 bg-slate-50 border-none rounded-xl"
-                oninput="updatePreview()"
-              />
-              <input
-                type="text"
-                id="clientAddr"
-                placeholder="Client Address / Location"
-                class="w-full p-3 bg-slate-50 border-none rounded-xl"
-                oninput="updatePreview()"
-              />
+              <div class="space-y-1">
+                <label for="clientBizName" class="text-xs font-bold text-slate-400 uppercase">Client Business Name</label>
+                <input
+                  type="text"
+                  id="clientBizName"
+                  placeholder="Business Name"
+                  class="w-full p-3 bg-slate-50 border-none rounded-xl"
+                  oninput="updatePreview()"
+                />
+              </div>
+              <div class="space-y-1">
+                <label for="clientName" class="text-xs font-bold text-slate-400 uppercase">Contact Person</label>
+                <input
+                  type="text"
+                  id="clientName"
+                  placeholder="Name"
+                  class="w-full p-3 bg-slate-50 border-none rounded-xl"
+                  oninput="updatePreview()"
+                />
+              </div>
+              <div class="space-y-1">
+                <label for="clientAddr" class="text-xs font-bold text-slate-400 uppercase">Client Address</label>
+                <input
+                  type="text"
+                  id="clientAddr"
+                  placeholder="Address / Location"
+                  class="w-full p-3 bg-slate-50 border-none rounded-xl"
+                  oninput="updatePreview()"
+                />
+              </div>
               <div class="grid grid-cols-2 gap-3">
-                <input
-                  type="email"
-                  id="clientEmail"
-                  placeholder="Client Email"
-                  class="p-3 bg-slate-50 border-none rounded-xl"
-                  oninput="updatePreview()"
-                />
-                <input
-                  type="tel"
-                  id="clientPhone"
-                  placeholder="Client Phone"
-                  class="p-3 bg-slate-50 border-none rounded-xl"
-                  oninput="updatePreview()"
-                />
+                <div class="space-y-1">
+                  <label for="clientEmail" class="text-xs font-bold text-slate-400 uppercase">Client Email</label>
+                  <input
+                    type="email"
+                    id="clientEmail"
+                    placeholder="Email"
+                    class="w-full p-3 bg-slate-50 border-none rounded-xl"
+                    oninput="updatePreview()"
+                  />
+                </div>
+                <div class="space-y-1">
+                  <label for="clientPhone" class="text-xs font-bold text-slate-400 uppercase">Client Phone</label>
+                  <input
+                    type="tel"
+                    id="clientPhone"
+                    placeholder="Phone"
+                    class="w-full p-3 bg-slate-50 border-none rounded-xl"
+                    oninput="updatePreview()"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -325,69 +411,16 @@
             class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200"
           >
             <h3 class="text-sm font-bold text-slate-500 uppercase mb-4">
-              Business Colors
+              Theme Color
             </h3>
-            <div class="flex flex-wrap gap-3">
-              <button
-                onclick="changeColor('#2563eb')"
-                class="w-10 h-10 rounded-xl bg-blue-600 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#0d9488')"
-                class="w-10 h-10 rounded-xl bg-teal-600 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#e11d48')"
-                class="w-10 h-10 rounded-xl bg-rose-600 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#ca8a04')"
-                class="w-10 h-10 rounded-xl bg-yellow-600 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#4f46e5')"
-                class="w-10 h-10 rounded-xl bg-indigo-600 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#18181b')"
-                class="w-10 h-10 rounded-xl bg-zinc-900 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#7c3aed')"
-                class="w-10 h-10 rounded-xl bg-violet-600 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#db2777')"
-                class="w-10 h-10 rounded-xl bg-pink-600 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#0891b2')"
-                class="w-10 h-10 rounded-xl bg-cyan-600 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#16a34a')"
-                class="w-10 h-10 rounded-xl bg-green-600 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#ea580c')"
-                class="w-10 h-10 rounded-xl bg-orange-600 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#dc2626')"
-                class="w-10 h-10 rounded-xl bg-red-600 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#eab308')"
-                class="w-10 h-10 rounded-xl bg-yellow-400 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#f59e0b')"
-                class="w-10 h-10 rounded-xl bg-amber-500 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
-              <button
-                onclick="changeColor('#d97706')"
-                class="w-10 h-10 rounded-xl bg-amber-600 border-4 border-white shadow-md hover:scale-110 transition"
-              ></button>
+            <div>
+              <label class="text-xs font-bold text-slate-400 uppercase">Color Slider</label>
+              <div class="mt-2">
+                <input type="range" min="0" max="360" value="220" 
+                  class="color-slider w-full"
+                  id="colorSlider"
+                  oninput="handleColorSlider(this.value)">
+              </div>
             </div>
           </div>
 
@@ -424,14 +457,17 @@
               <i class="fa-solid fa-note-sticky text-yellow-500"></i> Notes
             </h2>
             <div class="space-y-4">
-              <textarea
-                id="notesInput"
-                placeholder="Add a note or message for your client..."
-                class="w-full p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400 resize-vertical min-h-24"
-                oninput="updatePreview()"
-              ></textarea>
+              <div class="space-y-1">
+                <label for="notesInput" class="text-xs font-bold text-slate-400 uppercase">Invoice Notes</label>
+                <textarea
+                  id="notesInput"
+                  placeholder="Add a note or message for your client..."
+                  class="w-full p-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-400 resize-vertical min-h-24"
+                  oninput="updatePreview()"
+                ></textarea>
+              </div>
               <p class="text-xs text-slate-500">
-                This will appear at the bottom of your invoice
+                Visible at invoice footer
               </p>
             </div>
           </div>
@@ -439,6 +475,13 @@
 
         <div class="lg:col-span-7">
           <div class="sticky top-10">
+            <!-- Mobile Download Button -->
+            <button
+              onclick="downloadInvoice()"
+              class="md:hidden w-full bg-blue-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-blue-700 transition flex items-center justify-center gap-2 mb-4"
+            >
+              <i class="fa-solid fa-cloud-arrow-down"></i> Download PDF
+            </button>
             <div class="preview-wrapper shadow-inner overflow-auto">
               <div class="pdf-scale-container">
                 <div id="invoicePreview">
@@ -577,6 +620,17 @@
         document.getElementById("accentBgLight").style.backgroundColor =
           hex + "15";
         document.getElementById("accentBgLight").style.color = hex;
+        updatePreview();
+      }
+
+      function handleColorSlider(hue) {
+        const color = `hsl(${hue}, 75%, 45%)`;
+        currentColor = color;
+        document.getElementById("accentText").style.color = color;
+        document.getElementById("accentBorder").style.borderColor = color;
+        document.getElementById("accentBg").style.backgroundColor = color;
+        document.getElementById("accentBgLight").style.backgroundColor = `hsl(${hue}, 75%, 95%)`;
+        document.getElementById("accentBgLight").style.color = color;
         updatePreview();
       }
 

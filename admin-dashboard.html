@@ -1,7 +1,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - ilovereceipt</title>
+  <title>Admin Dashboard - Receiptlover</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
@@ -683,8 +683,8 @@
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = `px-3 py-2 rounded-lg border-2 transition font-semibold ${i === currentMonths
-            ? "bg-blue-600 text-white border-blue-600"
-            : "border-slate-200 text-slate-600 hover:border-blue-600"
+          ? "bg-blue-600 text-white border-blue-600"
+          : "border-slate-200 text-slate-600 hover:border-blue-600"
           }`;
         btn.textContent = i;
         btn.onclick = () => selectEditMonths(i);
