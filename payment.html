@@ -137,10 +137,13 @@
     const db = firebase.firestore();
 
     let currentUser = null;
+    let isInitialized = false; // Prevents premature redirects
     const BASE_PRICE = 35; // GHS per month
 
     // 1. Auth State Listener
     auth.onAuthStateChanged((user) => {
+      isInitialized = true; // Firebase has now confirmed auth status
+      
       if (user) {
         currentUser = user;
         db.collection("users")
@@ -159,24 +162,29 @@
                 document.getElementById("headerSubtitle").innerText = "Add more months to your active subscription.";
               }
 
-              // Show trial countdown if applicable
+              // Show trial countdown ONLY if trial.js is loaded and function exists
               if (data.subscriptionStatus === "trial" && expiry) {
-                if (window.startTrialBanner) window.startTrialBanner(expiry.getTime());
+                if (typeof window.startTrialBanner === "function") {
+                  window.startTrialBanner(expiry.getTime());
+                }
               }
             }
           })
           .catch((err) => console.error("Error fetching user data:", err));
       } else {
+        // Only redirect to login if we are certain the user is not logged in
+        console.log("No user detected, redirecting to login...");
         window.location.href = "login";
       }
     });
 
     /**
      * Smart Back Button Logic
-     * If active subscription -> Dashboard
-     * If expired -> Logout & Login Page
+     * Avoids signing out so the user stays authenticated for the payment
      */
     async function goBack() {
+      if (!isInitialized) return; // Wait for Firebase
+
       if (!currentUser) {
         window.location.href = "login";
         return;
@@ -190,12 +198,12 @@
           const data = doc.data();
           const expiry = data.subscriptionExpiry ? data.subscriptionExpiry.toDate() : null;
 
-          // Check if subscription or trial is still valid
+          // If they are still valid, they can go to the dashboard
           if (expiry && expiry > now) {
             window.location.href = "dashboard";
           } else {
-            // Subscription expired: Sign out and force login
-            await auth.signOut();
+            // If expired, just send to login page without signing out
+            // This allows the login page to redirect them back here if needed
             window.location.href = "login";
           }
         } else {
@@ -246,7 +254,7 @@
 
     // Initial call to set default pricing
     updatePricing();
-  </script>
+</script>
 </body>
 
 </html>
