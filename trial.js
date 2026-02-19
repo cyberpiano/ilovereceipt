@@ -1,3 +1,16 @@
+// trial.js - client-side helpers
+(function () {
+  // --- ADD THIS SAFETY CHECK ---
+  if (window.location.pathname.includes("payment.html") || window.location.pathname.includes("manual-payment")) {
+    console.log("Payment page detected: trial.js logic disabled.");
+    return; // Stop the script right here
+  }
+  // -----------------------------
+
+  const TRIAL_BLOCK_ID = 'trial-block-overlay';
+  const TRIAL_BANNER_ID = 'trial-banner-top';
+  
+  // ... rest of your code ...
 // trial.js - client-side helpers for 3-day trial banner and blocking modal
 (function () {
   const TRIAL_BLOCK_ID = 'trial-block-overlay';
