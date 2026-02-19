@@ -36,7 +36,7 @@
     auth.onAuthStateChanged(async (user) => {
       if (!user) {
         // Not logged in -> Redirect to Login
-        window.location.href = "login";
+        window.location.href = "login.html";
       } else {
         // Logged in -> Check Subscription
         const userDoc = await db.collection("users").doc(user.uid).get();
@@ -52,12 +52,12 @@
             // Expired -> show subscribe modal instead of immediate redirect
             if (window.blockPageWithSubscribe)
               window.blockPageWithSubscribe();
-            else window.location.href = "payment";
+            else window.location.href = "payment.html";
           }
           // Otherwise, access granted.
         } else {
           if (window.blockPageWithSubscribe) window.blockPageWithSubscribe();
-          else window.location.href = "payment";
+          else window.location.href = "payment.html";
         }
       }
     });
@@ -164,7 +164,8 @@
 
 <body class="bg-slate-200 p-4 md:p-8">
   <div class="max-w-7xl mx-auto mb-4">
-    <a href="dashboard" class="inline-flex items-center gap-2 text-slate-600 hover:text-blue-600 font-bold transition">
+    <a href="dashboard.html"
+      class="inline-flex items-center gap-2 text-slate-600 hover:text-blue-600 font-bold transition">
       <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
     </a>
   </div>
@@ -205,7 +206,7 @@
           <h3 class="text-sm font-bold text-slate-500 uppercase border-b pb-1 mt-6">
             Transaction Info
           </h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="space-y-3">
             <div class="space-y-1">
               <label for="rNo" class="text-xs font-bold text-slate-400 uppercase">Receipt No.</label>
               <input type="text" id="rNo" placeholder="Receipt No." class="w-full p-3 border rounded-xl"
@@ -735,7 +736,7 @@
             function downloadPDF() {
               const element = document.getElementById("receiptCapture");
               const opt = {
-                margin: 10,
+                margin: [15, 40, 15, 15], // [top, right, bottom, left] - larger right margin shifts content left visually, smaller left margin shifts right
                 filename: "Official_Receipt.pdf",
                 image: { type: "jpeg", quality: 1 },
                 html2canvas: {
@@ -758,11 +759,13 @@
                     const rCap = clonedDoc.getElementById('receiptCapture');
                     if (rCap) {
                       rCap.style.boxShadow = 'none';
-                      rCap.style.margin = '0';
+                      rCap.style.margin = '0 auto'; // Center horizontally
+                      rCap.style.marginLeft = '30mm'; // Push to the right
                     }
                   }
                 },
                 jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
               };
 
               // Execute html2pdf
@@ -772,6 +775,6 @@
             // Init
             update();
           </script>
-</body>
+ </body>
 
 </html>
