@@ -642,15 +642,41 @@
 
     function downloadInvoice() {
       const element = document.getElementById("invoicePreview");
+      const invoiceNumber = document.getElementById("invNum").value || "001";
+
+      // 1. Setup PDF options
       const opt = {
-        margin: 0, // We handle margins inside CSS padding to be precise
-        filename: `Invoice_${document.getElementById("invNum").value || "001"}.pdf`,
+        margin: 0,
+        filename: `Invoice_${invoiceNumber}.pdf`,
         image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        html2canvas: { 
+          scale: 3, // Higher scale for better clarity
+          useCORS: true, 
+          letterRendering: true,
+          scrollX: 0,
+          scrollY: 0
+        },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       };
-      html2pdf().set(opt).from(element).save();
+
+      // 2. Performance & Mobile Fix: 
+      // We temporarily remove the 'scaling' effect from the parent so the library captures full size
+      const container = document.querySelector('.pdf-scale-container');
+      const originalTransform = container.style.transform;
+      
+      // Force reset scale for the capture
+      container.style.transform = "none";
+
+      // 3. Execute capture
+      html2pdf().set(opt).from(element).save().then(() => {
+        // 4. Restore the scale so the user's view doesn't break after download
+        container.style.transform = originalTransform;
+      }).catch(err => {
+        console.error("PDF Error:", err);
+        container.style.transform = originalTransform;
+      });
     }
+
 
     // Init with one item
     addItem();
