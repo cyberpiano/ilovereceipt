@@ -249,16 +249,20 @@
         // --- SUBSCRIPTION CHECK ---
         const userDoc = await db.collection("users").doc(user.uid).get();
         const currentTime = new Date();
-
+        
         if (userDoc.exists) {
           const userData = userDoc.data();
-          if (!userData.subscriptionExpiry || userData.subscriptionExpiry.toDate() <= currentTime) {
-            handleRedirect("payment", true);
+          const expiry = userData.subscriptionExpiry ? userData.subscriptionExpiry.toDate() : null;
+        
+          // If expired or no expiry date found
+          if (!expiry || expiry <= currentTime) {
+            handleRedirect("payment", false); // Change true to false
           } else {
             handleRedirect("dashboard", false);
           }
         } else {
-          handleRedirect("payment", true);
+          // New user with no doc yet
+          handleRedirect("payment", false); // Change true to false
         }
 
       } catch (error) {
@@ -312,10 +316,14 @@
 
     async function handleRedirect(url, signoutRequired) {
       const loginBtn = document.getElementById("loginBtn");
-      if (signoutRequired) await auth.signOut();
-
+      
+      // REMOVED the signOut line here. We want them to stay logged in to pay!
+    
       loginBtn.innerHTML = '<i class="fa-solid fa-check-circle"></i> Success! Redirecting...';
-      setTimeout(() => { window.location.href = url; }, 700);
+      setTimeout(() => { 
+        // Add .html extension if your server doesn't handle clean URLs
+        window.location.href = url === "payment" ? "payment.html" : "dashboard.html"; 
+      }, 700);
     }
 
     function togglePassword(fieldId, btn) {
