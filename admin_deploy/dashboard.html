@@ -311,7 +311,7 @@
         // Check if user is admin
         if (!ADMIN_EMAILS.includes(user.email)) {
           alert("Access denied. Admin privileges required.");
-          window.location.href = "dashboard";
+          window.location.href = "https://receiptlover.com/dashboard";
           return;
         }
 
@@ -321,7 +321,7 @@
         // Load payments
         loadPayments();
       } else {
-        window.location.href = "login";
+        window.location.href = "index";
       }
     });
 
@@ -660,7 +660,7 @@
     // Logout
     function logout() {
       auth.signOut().then(() => {
-        window.location.href = "login";
+        window.location.href = "index";
       });
     }
 

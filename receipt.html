@@ -4,13 +4,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>One-Page Receipt Pro</title>
+  <title>Create Receipt - Receiptlover</title>
+  <meta name="description"
+    content="Create and download professional receipts instantly. Customize business details, currency, and items. Secure and fast receipt generator." />
+  <meta name="keywords"
+    content="create receipt, receipt generator, online receipt maker, custom receipt, digital receipt" />
+  <meta name="author" content="Receiptlover" />
+  <meta name="robots" content="index, follow" />
+
+  <link rel="canonical" href="https://receiptlover.com/receipt" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://receiptlover.com/receipt" />
+  <meta property="og:title" content="Create Receipt - Receiptlover" />
+  <meta property="og:description"
+    content="Generate professional receipts with Receiptlover. Customize and download instantly." />
+  <meta property="og:image" content="https://receiptlover.com/assets/favicon/android-chrome-512x512.png" />
+
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://receiptlover.com/receipt" />
+  <meta property="twitter:title" content="Create Receipt - Receiptlover" />
+  <meta property="twitter:description"
+    content="Generate professional receipts with Receiptlover. Customize and download instantly." />
+  <meta property="twitter:image" content="https://receiptlover.com/assets/favicon/android-chrome-512x512.png" />
+
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="trial.js"></script>
   <script>
-     // REPLACE WITH YOUR FIREBASE CONFIG
+    // REPLACE WITH YOUR FIREBASE CONFIG
     const firebaseConfig = {
       apiKey: "AIzaSyDnN7AODVubqLmnOniyjQkSWGvBJJ2kMQU",
       authDomain: "invoiceapp-3fe51.firebaseapp.com",
@@ -31,61 +58,49 @@
     auth.onAuthStateChanged(async (user) => {
       if (!user) {
         // Not logged in -> Redirect to Login
-        window.location.href = "login.html";
+        window.location.href = "login";
       } else {
         // Logged in -> Check Subscription
-        const userDoc = await db.collection("users").doc(user.uid).get();
-        if (userDoc.exists) {
-          const data = userDoc.data();
-          const now = new Date();
+        try {
+          const userDoc = await db.collection("users").doc(user.uid).get();
+          if (userDoc.exists) {
+            const data = userDoc.data();
+            const now = new Date();
 
-          // Check if expiry date exists and is in the future
-          if (
-            !data.subscriptionExpiry ||
-            data.subscriptionExpiry.toDate() < now
-          ) {
-            // Expired -> show subscribe modal instead of immediate redirect
-            if (window.blockPageWithSubscribe)
-              window.blockPageWithSubscribe();
-            else window.location.href = "payment.html";
-          }
-          // Otherwise, access granted.
-        } else {
-          if (window.blockPageWithSubscribe) window.blockPageWithSubscribe();
-          else window.location.href = "payment.html";
-        }
-      }
-    });
-
-    // Hide page content until auth is confirmed
-    // document.body.style.opacity = "0"; // Handle via inline CSS on body for faster hiding
-
-    let businessProfile = { bizName: "", logoUrl: "", currency: "GH₵" };
-    let saveTimeout;
-
-   
-
-            // Load Saved Business Profile
-            if (data.businessProfile) {
-              businessProfile = data.businessProfile;
-              document.getElementById("bizName").value = businessProfile.bizName || "";
-              document.getElementById("currency").value = businessProfile.currency || "GH₵";
-              if (businessProfile.logoUrl) {
-                const img = document.getElementById("pLogo");
-                img.src = businessProfile.logoUrl;
-                img.classList.remove("hidden");
+            // Check if expiry date exists and is in the future
+            if (
+              !data.subscriptionExpiry ||
+              data.subscriptionExpiry.toDate() < now
+            ) {
+              // Expired -> show subscribe modal instead of immediate redirect
+              if (window.blockPageWithSubscribe)
+                window.blockPageWithSubscribe();
+              else window.location.href = "payment";
+            } else {
+              // Access Granted
+              // Load Saved Business Profile
+              if (data.businessProfile) {
+                businessProfile = data.businessProfile;
+                document.getElementById("bizName").value = businessProfile.bizName || "";
+                document.getElementById("currency").value = businessProfile.currency || "GH₵";
+                if (businessProfile.logoUrl) {
+                  const img = document.getElementById("pLogo");
+                  img.src = businessProfile.logoUrl;
+                  img.classList.remove("hidden");
+                }
               }
-            }
 
-            loadLocalCache();
-            update();
+              loadLocalCache();
+              update();
+            }
           } else {
-             if (window.blockPageWithSubscribe) window.blockPageWithSubscribe();
-             else window.location.replace("payment.html");
+            // User doc doesn't exist? Treat as new/expired
+            if (window.blockPageWithSubscribe) window.blockPageWithSubscribe();
+            else window.location.href = "payment";
           }
         } catch (error) {
           console.error("Auth Error:", error);
-          window.location.replace("login.html");
+          window.location.href = "login";
         }
       }
     });
@@ -180,7 +195,7 @@
 
 <body class="bg-slate-50">
   <div class="max-w-7xl mx-auto px-4 py-4">
-    <a href="dashboard.html"
+    <a href="dashboard"
       class="inline-flex items-center gap-2 text-slate-600 hover:text-blue-600 font-bold transition text-sm">
       <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
     </a>
@@ -196,7 +211,8 @@
       <div class="space-y-6">
         <div class="space-y-4">
           <div class="flex items-center justify-center w-full">
-            <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition">
+            <label
+              class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition">
               <div class="flex flex-col items-center justify-center pt-5 pb-6">
                 <i class="fa-solid fa-image text-2xl text-slate-400 mb-2"></i>
                 <p class="text-xs text-slate-500">Upload Business Logo</p>
@@ -390,20 +406,7 @@
   </div>
 
   <script>
-    // 1. Firebase Configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyDnN7AODVubqLmnOniyjQkSWGvBJJ2kMQU",
-      authDomain: "invoiceapp-3fe51.firebaseapp.com",
-      projectId: "invoiceapp-3fe51",
-      storageBucket: "invoiceapp-3fe51.firebasestorage.app",
-      messagingSenderId: "178955208220",
-      appId: "1:178955208220:web:128a713add6c992f9981d9",
-    };
-
-    // Initialize Firebase
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    // 4. Auto-Save Logic (Cloud)
     // 3. Helper: Load Local Cache
     function loadLocalCache() {
       const savedData = localStorage.getItem("activeReceipt");

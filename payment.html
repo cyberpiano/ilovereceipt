@@ -106,7 +106,7 @@
     </div>
 
     <!-- MoMo Payment Button -->
-    <a href="manual-payment.html" onclick="preparePayment(event)"
+    <a href="manual-payment" onclick="preparePayment(event)"
       class="block w-full gradient-bg text-white font-bold py-3 md:py-4 px-4 rounded-xl hover:shadow-2xl transition shadow-lg shadow-purple-300 hover:scale-[1.02] transform text-center text-sm md:text-base no-underline">
       <i class="fa-brands fa-whatsapp mr-2"></i>
       <span id="buttonText">Pay with MoMo (35 GHS)</span>
@@ -167,7 +167,7 @@
           })
           .catch((err) => console.error("Error fetching user data:", err));
       } else {
-        window.location.href = "login.html";
+        window.location.href = "login";
       }
     });
 
@@ -178,7 +178,7 @@
      */
     async function goBack() {
       if (!currentUser) {
-        window.location.href = "login.html";
+        window.location.href = "login";
         return;
       }
 
@@ -192,18 +192,18 @@
 
           // Check if subscription or trial is still valid
           if (expiry && expiry > now) {
-            window.location.href = "dashboard.html";
+            window.location.href = "dashboard";
           } else {
             // Subscription expired: Sign out and force login
             await auth.signOut();
-            window.location.href = "login.html";
+            window.location.href = "login";
           }
         } else {
-          window.location.href = "login.html";
+          window.location.href = "login";
         }
       } catch (err) {
         console.error("Error in goBack:", err);
-        window.location.href = "login.html";
+        window.location.href = "login";
       }
     }
 
@@ -240,7 +240,7 @@
     // 4. Logout Logic
     function logout() {
       auth.signOut().then(() => {
-        window.location.href = "login.html";
+        window.location.href = "login";
       });
     }
 

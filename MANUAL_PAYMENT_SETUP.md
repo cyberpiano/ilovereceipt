@@ -151,7 +151,7 @@ You can add a link to the admin dashboard in your main navigation:
 
 ```html
 <!-- Only show for admin users -->
-<a href="admin-dashboard.html" 
+<a href="admin-dashboard" 
    class="nav-link">
   <i class="fa-solid fa-shield-halved"></i>
   Admin Dashboard

@@ -1,0 +1,21 @@
+RewriteEngine On
+
+# Redirect www to non-www (optional, remove if not needed)
+# RewriteCond %{HTTP_HOST} ^www.receiptlover.com [NC]
+# RewriteRule ^(.*)$ https://receiptlover.com/$1 [L,R=301]
+
+# Force HTTPS (optional, recommended)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Remove .html extension
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+# Redirect external .html requests to extensionless url
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^.]+)\.html [NC]
+RewriteRule ^ %1 [R=301,L]
+
+# Handle 404
+ErrorDocument 404 /404.html

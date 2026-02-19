@@ -4,7 +4,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up - Receiptlover</title>
+  <title>Sign Up - Receiptlover | Free Trial</title>
+  <meta name="description"
+    content="Create a free Receiptlover account today. Start your 3-day free trial and generate professional receipts and invoices instantly." />
+  <meta name="keywords"
+    content="sign up, register, create account, receipt maker free trial, invoice generator signup" />
+  <meta name="author" content="Receiptlover" />
+  <meta name="robots" content="index, follow" />
+
+  <link rel="canonical" href="https://receiptlover.com/signup" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://receiptlover.com/signup" />
+  <meta property="og:title" content="Sign Up - Receiptlover | Free Trial" />
+  <meta property="og:description"
+    content="Start your 3-day free trial with Receiptlover. Create professional receipts and invoices in seconds." />
+  <meta property="og:image" content="https://receiptlover.com/assets/favicon/android-chrome-512x512.png" />
+
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://receiptlover.com/signup" />
+  <meta property="twitter:title" content="Sign Up - Receiptlover | Free Trial" />
+  <meta property="twitter:description"
+    content="Start your 3-day free trial with Receiptlover. Create professional receipts and invoices in seconds." />
+  <meta property="twitter:image" content="https://receiptlover.com/assets/favicon/android-chrome-512x512.png" />
+
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
@@ -88,7 +115,7 @@
   <div class="bg-white p-8 md:p-10 rounded-3xl shadow-2xl w-full max-w-md border border-purple-100 slide-in">
     <!-- Back Button -->
     <div class="flex justify-start items-center mb-6">
-      <a href="index.html"
+      <a href="index"
         class="text-sm text-slate-500 hover:text-purple-600 inline-flex items-center gap-2 transition font-medium">
         <i class="fa-solid fa-arrow-left"></i> Back to Home
       </a>
@@ -220,7 +247,7 @@
     <!-- Login Link -->
     <p class="text-center text-sm text-slate-500 mt-6">
       Already have an account?
-      <a href="login.html" class="text-purple-600 font-bold hover:underline">
+      <a href="login" class="text-purple-600 font-bold hover:underline">
         Log In <i class="fa-solid fa-arrow-right text-xs"></i>
       </a>
     </p>
@@ -323,7 +350,7 @@
                 '<i class="fa-solid fa-check-circle"></i> Success! Redirecting...';
             }
             setTimeout(() => {
-              window.location.href = "dashboard.html";
+              window.location.href = "dashboard";
             }, 900);
           } else {
             if (signupBtn) {
@@ -334,7 +361,7 @@
               alert(
                 "This device has already used a free trial. Please subscribe to continue.",
               );
-              window.location.href = "payment.html";
+              window.location.href = "payment";
             }, 900);
           }
         } catch (error) {
