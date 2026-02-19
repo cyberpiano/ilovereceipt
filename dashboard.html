@@ -106,9 +106,21 @@
             // SUCCESS: Grant access to receipt pages for this session
             sessionStorage.setItem("receipt_access_granted", "true");
 
-            document.getElementById("userEmail").innerText = user.email;
-            document.getElementById("expiryDate").innerText =
-              "Premium: " + data.subscriptionExpiry.toDate().toLocaleDateString();
+            // Define the display values
+            const userEmailValue = user.email;
+            const expiryDateValue = "Premium: " + data.subscriptionExpiry.toDate().toLocaleDateString();
+
+            // UPDATE DESKTOP VIEW
+            document.getElementById("userEmail").innerText = userEmailValue;
+            document.getElementById("expiryDate").innerText = expiryDateValue;
+
+            // UPDATE MOBILE VIEW (Fixes the "Loading..." and "Checking..." issue)
+            if (document.getElementById("mobileUserEmail")) {
+              document.getElementById("mobileUserEmail").innerText = userEmailValue;
+            }
+            if (document.getElementById("mobileExpiryDate")) {
+              document.getElementById("mobileExpiryDate").innerText = expiryDateValue;
+            }
 
           } else {
             await auth.signOut();
@@ -119,7 +131,6 @@
         }
       }
     });
-
     function logout() {
       // Clear everything on logout
       sessionStorage.removeItem("receipt_access_granted");
